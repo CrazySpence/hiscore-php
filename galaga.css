@@ -1,0 +1,96 @@
+a {outline : none;}
+a img {outline : none;}
+img {border : 0;}
+
+body.menu {
+    display: block;
+    background-color: black;
+    text-align: center;
+    font-family: 'Emulogic';
+    color: white;
+}
+
+@font-face {
+    font-family: 'Emulogic';
+    src: url("emulogic.ttf") format("truetype");
+}
+
+body.mspacman {
+    display: block;
+    background-color: black;
+    background-image: url("img/mspacman.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    text-align: center;
+    font-family: 'Emulogic';
+    color: white;
+}
+
+.mspacmanhi {
+    text-align: center;
+    padding-top: 7%;
+    font-family: 'Emulogic';
+    color: lightgrey;
+}
+
+body.pacman {
+    display: block;
+    background-color: black;
+    background-image: url("img/pacman.PNG");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    text-align: center;
+    font-family: 'Emulogic';
+    color: white;
+}
+
+.pacmanhi {
+    text-align: center;
+    padding-top: 12%;
+    font-family: 'Emulogic';
+    color: yellow;
+}
+body.n942 {
+    display: block;
+    background-color: black;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+img.n942 {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+table.n942 {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.n942hi {
+    text-align: center;
+    font-family: 'Emulogic';
+    color: gold;
+}
+.galagabody {
+    background-color: black;
+    background-image: url("img/galagacabblank.jpg");
+    background-repeat: no-repeat;
+    background-size: 40%;
+    background-position: center;
+    background-attachment: fixed;
+}
+.galagahi {
+    text-align: center;
+    padding-top: 25%;
+    font-family: 'Emulogic';
+    color: gold;
+}
+
+.1942hi {
+    text-align: center;
+
+}
