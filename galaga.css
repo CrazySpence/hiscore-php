@@ -71,12 +71,31 @@ table.n942 {
     margin-left: auto;
     margin-right: auto;
 }
-
 .n942hi {
     text-align: center;
     font-family: 'Emulogic';
     color: gold;
 }
+
+body.wonderboy {
+    display: block;
+    background-color: black;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+img.wonderboy {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.wonderboyhi {
+    text-align: center;
+    font-family: 'Emulogic';
+    color: gold;
+}
+
 .galagabody {
     background-color: black;
     background-image: url("img/galagacabblank.jpg");

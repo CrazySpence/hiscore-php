@@ -2,10 +2,12 @@
 //Set paths to your hiscore files, shguld work with a/b/bootleg versions of the same game
 //Defaults are set for retropie/mame2003
 
-$n942     = "/home/pi/RetroPie/roms/mame-libretro/mame2003/hi/1942.hi";
-$galaga   = "/home/pi//RetroPie/roms/mame-libretro/mame2003/hi/galagab2.hi";
-$mspacman = "/home/pi//RetroPie/roms/mame-libretro/mame2003/hi/mspacman.hi";
-$pacman   = "/home/pi//RetroPie/roms/mame-libretro/mame2003/hi/pacman.hi";
+$n942      = "/home/pi/RetroPie/roms/mame-libretro/mame2003/hi/1942.hi";
+$galaga    = "/home/pi//RetroPie/roms/mame-libretro/mame2003/hi/galagab2.hi";
+$mspacman  = "/home/pi//RetroPie/roms/mame-libretro/mame2003/hi/mspacman.hi";
+$pacman    = "/home/pi//RetroPie/roms/mame-libretro/mame2003/hi/pacman.hi";
+$wonderboy = "/home/pi//RetroPie/roms/mame-libretro/mame2003/hi/wboy.hi";
+$gngoblins = "/home/pi//RetroPie/roms/mame-libretro/mame2003/hi/gng.hi";
 ?>
 
 <html>
@@ -34,6 +36,10 @@ if(isset($_GET["mspacman"])) {
     exit(1);
 }
 
+if(isset($_GET["wonderboy"])) {
+    showWonderboy();
+    exit(1);
+}
 ?>
 <?php
 
@@ -128,6 +134,86 @@ function showGalaga()
     for ($i = 0; $i < 5; $i++)
         echo $data["score"][$i] . " " . $data["initials"][$i] . "\n<br/>\n";
     echo '</div>';
+}
+
+function showWonderboy()
+{
+    global $wonderboy;
+    $data = wonderboy($wonderboy);
+    ?>
+    <body class="wonderboy">
+    <div>
+           <img class="n942" src="img/wonderboy.png">
+           <br/>
+       </div>
+    <div class="wonderboyhi">
+    <?php
+    for ($i = 0; $i < 7; $i++)
+        echo $data["score"][$i] . " " . $data["initials"][$i] . "\n<br/>\n";
+    echo '</div>';
+}
+
+function showGngoblins()
+{
+    global $gngoblins;
+    $data = gngoblins($gngoblins);
+
+    echo '<body class="gngoblinsbody">';
+    echo '<div class="gngoblinshi">';
+    for ($i = 0; $i < 10; $i++)
+        echo $data["score"][$i] . " " . $data["initials"][$i] . "\n<br/>\n";
+    echo '</div>';
+}
+
+function wonderboy($file) {
+    //Wonder boy is a 21 line file arranged in a fairly easy to parse manner
+    //Null is 20
+    //Interesting score storage it seems they are cut by a factor of 10 probably to save RAM
+
+    if (!$file) {
+        echo "ERROR: No file specified";
+        exit();
+    }
+    $fp = fopen($file,"r") or die("cannot open file!");
+
+    $bytes = array();
+    $scoretable = array("score" => array(),"initials" => array(),"top" => 0,"level" => array());
+
+    while(!feof($fp)) {
+        $buf = fread($fp,1);
+        array_push($bytes,bin2hex($buf));
+    }
+
+    reset($bytes); //Start from the beginning
+    $position = 0;
+
+    for($lineCounter = 0; $lineCounter < 21; $lineCounter++ ) {
+        //Walk the bytes
+        $index = $lineCounter; //hexdec($bytes[$position]);
+        $score = sprintf("%c%c%c%c%c%c",hexdec($bytes[$position+2]),hexdec($bytes[$position+3]),hexdec($bytes[$position+4]),hexdec($bytes[$position+5]),hexdec($bytes[$position+6]),hexdec($bytes[$position+7]));
+        $score = $score * 10;
+        $temp = array();
+        for ($k=8; $k<11 ; $k++) {
+
+            if(hexdec($bytes[$position+$k] != 20)){
+                $strtemp = sprintf("%c",hexdec($bytes[$position + $k]));
+                array_push($temp, $strtemp);
+            } else {
+                array_push($temp," ");
+            }
+        }
+        $name = sprintf("%s%s%s",$temp[0],$temp[1],$temp[2]);
+        $scoretable["score"][$index] = ltrim($score,'0');
+        $scoretable["initials"][$index] = $name;
+        $scoretable["level"][$index] = $level;
+
+        $position = $position + 16;
+    }
+    return $scoretable;
+}
+
+function gngoblins($file) {
+
 }
 
 function nineteen42($file) {
@@ -255,12 +341,21 @@ function galaga($file) {
         /*
            parse and combine the 5 TOP SCORES
         */
+
         $temp = array();
         for ($k=0; $k<6 ; $k++) {
             array_push($temp,current($bytes));
             next($bytes);
         }
         $temp = array_reverse($temp);
+
+        //init.
+        $hk = 0;
+        $tk = 0;
+        $k  = 0;
+        $hd = 0;
+        $t  = 0;
+        $o  = 0;
 
         if($temp[0] != 24) /* 24 is the null value used by the hardware */
             $hk = $temp[0];
